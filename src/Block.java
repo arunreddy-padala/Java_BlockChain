@@ -12,6 +12,7 @@ public class Block {
   public String previousHash;
   private String data;
   private long timeStamp;
+  private int nonce;
 
   public Block(String Data, String PreviousHash) throws NoSuchAlgorithmException {
 
@@ -27,12 +28,31 @@ public class Block {
     String calculatedHash = EncryptString.applySha256(
             previousHash +
                     Long.toString(timeStamp) +
+                    Integer.toString(nonce) +
                     data
     );
 
     return calculatedHash;
 
   }
+
+  /*
+  Method to mine blocks, difficulty determines the number of 0's miners needs to solve for.
+  */
+  public void mineBlock(int difficulty) throws NoSuchAlgorithmException {
+
+  String target = new String(new char[difficulty]).replace('\0', '0');
+  while(!hash.substring(0,difficulty).equals(target)) {
+
+    nonce++;
+    hash = calculateHash();
+  }
+
+    System.out.println("Block Mined: " + hash);
+
+  }
+
+
 
 }
 
