@@ -1,3 +1,4 @@
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
 /*
@@ -12,45 +13,27 @@ public class Block {
   private String data;
   private long timeStamp;
 
-  public Block(String Data, String PreviousHash) {
+  public Block(String Data, String PreviousHash) throws NoSuchAlgorithmException {
 
     this.data = Data;
     this.previousHash = PreviousHash;
     this.timeStamp = new Date().getTime();
+    this.hash = calculateHash();
 
   }
 
+  public String calculateHash() throws NoSuchAlgorithmException {
 
-  public String getHash() {
-    return hash;
+    String calculatedHash = EncryptString.applySha256(
+            previousHash +
+                    Long.toString(timeStamp) +
+                    data
+    );
+
+    return calculatedHash;
+
   }
 
-  public String getPreviousHash() {
-    return previousHash;
-  }
-
-  public String getData() {
-    return data;
-  }
-
-  public long getTimeStamp() {
-    return timeStamp;
-  }
-
-  public void setHash(String hash) {
-
-    this.hash = hash;
-  }
-
-  public void setPreviousHash(String previousHash) {
-    this.previousHash = previousHash;
-  }
-
-  public void setData(String data) {
-    this.data = data;
-  }
-
-  public void setTimeStamp(long timeStamp) {
-    this.timeStamp = timeStamp;
-  }
 }
+
+
